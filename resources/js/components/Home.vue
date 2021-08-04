@@ -1,21 +1,22 @@
 <template>
   <h1>This is Home Page</h1>
-  <p>Name in store is: {{ name }}</p>
+  <p>Name in store is: {{ user }}</p>
 </template>
 
-<script setup>
+<script>
 
-import { computed } from 'vue'
-import { useStore } from 'vuex'
+export default {
 
-const store = useStore()
+    data() {
+        return {
+            user: ''
+        }
+    },
 
-const name = computed(() => {
-    return store.state.user.name
-})
+    mounted() {
+        this.user = this.$store.state.auth.user
+    }
 
-// export default {
-
-// }
+}
 </script>
 

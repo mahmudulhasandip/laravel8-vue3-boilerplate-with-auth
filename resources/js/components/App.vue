@@ -4,7 +4,6 @@
     <div>
         <div class="bg max-w-6xl mx-auto sm:px-6 lg:px-8">
             <router-view />
-            <!-- <Login /> -->
         </div>
     </div>
 </template>
