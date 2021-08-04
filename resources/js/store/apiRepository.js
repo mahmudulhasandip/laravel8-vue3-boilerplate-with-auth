@@ -14,7 +14,11 @@ export default {
         return axios.post("/api/login", params);
     },
 
-    logout(params) {
-        return axios.post("/api/logout", params);
+    logout() {
+        return axios.post("/api/logout");
+    },
+
+    getUser() {
+        return axios.get("/api/user");
     },
 };

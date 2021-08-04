@@ -9,34 +9,20 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav mr-auto">
 
-                </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
-                            <li class="nav-item">
-                                <router-link class="nav-link" :to="{ name: 'login' }">Login</router-link>
-                            </li>
-                            <li class="nav-item">
-                                <router-link class="nav-link" :to="{ name: 'register' }">Register</router-link>
-                            </li>
-                        <!-- <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                Name
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item"
-                                    >
-                                    Logout
-                                </a>
-
-
-                            </div>
-                        </li> -->
+                    <li class="nav-item">
+                    <router-link class="nav-link" v-if="!authenticated" :to="{ name: 'login' }">Login</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" v-if="!authenticated" :to="{ name: 'register' }">Register</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" v-if="authenticated" :to="{}" @click="handleLogout">Logout</router-link>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -44,7 +30,37 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
+
+    data() {
+        return {
+            loading: false,
+            error: null,
+        }
+    },
+
+    computed: {
+        ...mapGetters({
+            authenticated: 'authenticated'
+        })
+    },
+
+    methods: {
+        async handleLogout(){
+            this.error = null;
+            this.loading = true;
+
+            try {
+                await this.$store.dispatch('logout');
+                await this.$router.push({name: 'login'})
+            } catch (error) {
+                this.error = error;
+            } finally {
+                this.loading = false
+            }
+        }
+    }
 
 }
 </script>

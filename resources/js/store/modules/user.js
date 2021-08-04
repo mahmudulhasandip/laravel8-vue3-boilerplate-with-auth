@@ -1,16 +1,18 @@
+import apiRepository from "../apiRepository";
 export default {
     state: () => ({
-        name: "Dip",
+        user: "",
     }),
     getters: {},
     mutations: {
-        SET_NAME(state, payload) {
-            state.name = payload;
+        SET_USER(state, user) {
+            state.user = user;
         },
     },
     actions: {
-        saveName({ commit }, data) {
-            commit("SET_NAME", data);
+        async getUser({ commit }) {
+            const { data } = await apiRepository.getUser();
+            commit("SET_USER", data);
         },
     },
 };
