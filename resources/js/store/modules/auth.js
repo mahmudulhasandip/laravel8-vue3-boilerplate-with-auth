@@ -23,7 +23,9 @@ export default {
         },
 
         async register({ commit }, user) {
+            await apiRepository.createSession();
             const { data } = await apiRepository.register(user);
+            sessionStorage.user = JSON.stringify(data);
             commit("SET_USER", data);
         },
 

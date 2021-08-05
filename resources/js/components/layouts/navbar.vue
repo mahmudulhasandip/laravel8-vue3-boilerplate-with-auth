@@ -53,6 +53,7 @@ export default {
 
             try {
                 await this.$store.dispatch('logout');
+                await this.$store.reset()
                 await this.$router.push({name: 'login'})
             } catch (error) {
                 this.error = error;

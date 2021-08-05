@@ -7,48 +7,51 @@
 
                 <div class="card-body">
                     <form @submit.prevent="handleRegister">
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control is-invalid" name="name" v-model="formData.name" required autocomplete="name" autofocus>
+                                <input id="name" type="text" class="form-control" :class="{ 'is-invalid': v$.formData.name.$errors.length }" name="name" v-model="formData.name" autocomplete="name" autofocus>
 
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>message</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert" v-for="err of v$.formData.name.$errors" :key="err.$uid">
+                                    <strong>{{ err.$message }}</strong>
+                                </span>
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label for="email" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control is-invalid" name="email" v-model="formData.email" required autocomplete="email">
+                                <input id="email" type="email" class="form-control " :class="{ 'is-invalid': v$.formData.email.$errors.length }" name="email" v-model="formData.email" autocomplete="email">
 
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>message</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert" v-for="err of v$.formData.email.$errors" :key="err.$uid">
+                                    <strong>{{ err.$message }}</strong>
+                                </span>
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control is-invalid" name="password" v-model="formData.password" required autocomplete="new-password">
+                                <input id="password" type="password" class="form-control" :class="{ 'is-invalid': v$.formData.password.$errors.length }" name="password" v-model="formData.password" autocomplete="new-password">
 
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>message</strong>
-                                    </span>
+                                <span class="invalid-feedback" role="alert" v-for="err of v$.formData.password.$errors" :key="err.$uid">
+                                    <strong>{{ err.$message }}</strong>
+                                </span>
 
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label for="password-confirm" class="col-md-4 col-form-label text-md-right">Confirm Password</label>
 
                             <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" v-model="formData.password_confirmation" required autocomplete="new-password">
+                                <input id="password-confirm" type="password" class="form-control" :class="{ 'is-invalid': v$.formData.password_confirmation.$errors.length }" name="password_confirmation" v-model="formData.password_confirmation"  autocomplete="new-password">
+                                <span class="invalid-feedback" role="alert" v-for="err of v$.formData.password_confirmation.$errors" :key="err.$uid">
+                                    <strong>{{ err.$message }}</strong>
+                                </span>
                             </div>
                         </div>
 
@@ -68,10 +71,14 @@
 </template>
 
 <script>
+import useVuelidate from '@vuelidate/core'
+import { required, minLength, email, sameAs } from '@vuelidate/validators'
+
 export default {
 
     data() {
         return {
+            v$: useVuelidate(),
             formData: {
                 'name': '',
                 'email': '',
@@ -83,8 +90,31 @@ export default {
         }
     },
 
+    validations: {
+        formData: {
+            name: {
+                required
+            },
+            email: {
+                required,
+                email
+            },
+            password: {
+                required,
+                minLength: minLength(8)
+            },
+            password_confirmation: {
+                required,
+                minLength: minLength(8),
+                sameAsPassword: sameAs(() => this.formData.password),
+            },
+        }
+    },
+
     methods: {
+
         async handleRegister(){
+            this.v$.$validate();
             this.error = null;
             this.loading = true;
 
@@ -93,8 +123,8 @@ export default {
                 await this.$store.dispatch('register', this.formData);
                 await this.$router.push({name: 'home'})
 
-            }catch(err){
-                this.error = err
+            }catch(e){
+                this.error = e
             } finally {
                 this.loading = false
             }

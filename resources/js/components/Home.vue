@@ -6,15 +6,17 @@
                 <router-link to="" @click="getUser">Get User Details</router-link>
 
                 <span v-if="loading">Loading...</span>
-                <div class="card" v-if="get_user">
+
+                <div class="card" v-if="Object.keys(get_user).length">
                     <div class="card-body">
 
                         <ul >
                             <li>{{get_user.name}}</li>
                             <li>{{get_user.email}}</li>
                             <li>{{$moment(get_user.created_at).format('DD MM YYYY hh:mm:ss')}}</li>
-                            <li>{{get_user.updated_at}}</li>
+                            <li>{{$moment(get_user.updated_at).format('DD MM YYYY hh:mm:ss')}}</li>
                         </ul>
+
                     </div>
                 </div>
             </div>

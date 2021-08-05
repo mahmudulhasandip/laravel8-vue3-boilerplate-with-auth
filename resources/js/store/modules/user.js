@@ -5,14 +5,14 @@ export default {
     }),
     getters: {},
     mutations: {
-        SET_USER(state, user) {
+        SET_USER_DETAILS(state, user) {
             state.user = user;
         },
     },
     actions: {
         async getUser({ commit }) {
             const { data } = await apiRepository.getUser();
-            commit("SET_USER", data);
+            commit("SET_USER_DETAILS", data);
         },
     },
 };
