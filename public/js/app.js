@@ -20788,11 +20788,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
                 _this.loading = true;
                 _context.prev = 2;
                 _context.next = 5;
-                return _this.$store.dispatch('logout');
+                return _this.$store.reset();
 
               case 5:
                 _context.next = 7;
-                return _this.$store.reset();
+                return _this.$store.dispatch('logout');
 
               case 7:
                 _context.next = 9;
