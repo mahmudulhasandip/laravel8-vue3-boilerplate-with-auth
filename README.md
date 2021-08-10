@@ -16,6 +16,7 @@ Front-end:
 -   [Vue 3]
 -   [VueRouter 4]
 -   [Vuex 4]
+-   [aacassandra/vue3-progressbar]
 -   [Bootstrap 4]
 -   [Laravel Mix]
 
